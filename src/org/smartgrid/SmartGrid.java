@@ -9,7 +9,6 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.ListChangeListener;
@@ -182,14 +181,15 @@ public class SmartGrid extends GridPane {
     }
     
     public void switchRows(int sourceIndex, int destIndex){
-        Stream<Node> sourceRowNodes = getChildren().stream()
-                .filter((node) -> node != null && (row(node) == sourceIndex));
-        Stream<Node> destRowNodes = getChildren().stream()
-                .filter((node) -> node != null && (row(node) == destIndex));
-        
-        sourceRowNodes.forEach(node -> row(node, sourceIndex));
-        destRowNodes.forEach(node -> row(node, destIndex));
-        
+        getChildren().stream()
+                .filter((node) -> node != null && (row(node) == sourceIndex || row(node) == destIndex))
+                .forEach(node -> {
+                    if(row(node) == sourceIndex) {
+                        row(node, destIndex);
+                    } else {
+                        row(node, sourceIndex);
+                    }
+                });
     }
     
     public void clear(){
