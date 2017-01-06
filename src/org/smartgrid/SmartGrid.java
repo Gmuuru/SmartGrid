@@ -6,6 +6,7 @@
 package org.smartgrid;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -168,6 +169,20 @@ public class SmartGrid extends GridPane {
         if(node instanceof SmartGridElement){
             ((SmartGridElement) node).properties().parentProperty().set(null);
         }
+    }
+    
+    public List<Node> getRow(int rowIndex){
+        return getChildren().stream()
+            .filter((node) -> node != null && row(node) == rowIndex)
+            .collect(Collectors.toList());
+    }
+    
+    public List<List<Node>> getDataRows(){
+        List<List<Node>> res = new ArrayList<>();
+        for(int row = getNbHeaderRows(); row <= getMaxRowIndex(); row++){
+            res.add(getRow(row));
+        }
+        return res;
     }
     
     public void deleteRow(int rowIndex){
